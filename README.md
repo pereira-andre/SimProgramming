@@ -32,7 +32,7 @@ Para instalar e executar o SharpCEstate localmente, siga os passos abaixo:
 Este projeto é distribuído sob a Licença MIT. Veja o arquivo `LICENSE` para mais informações.
 
 ## Contato
-- Nome do Líder: André Pereira
+- Líder: André Pereira
 - Desenvolvedores: Mário Prazeres, Rúben Nunes, Luciano Araújo
 - Verificadora: Carla Campa
 - Email: 2202880@estudante.uab.pt
