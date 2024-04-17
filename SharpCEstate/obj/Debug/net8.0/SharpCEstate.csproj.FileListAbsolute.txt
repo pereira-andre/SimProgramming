@@ -1,0 +1,15 @@
+C:\Users\lucia\SimProgramming\SharpCEstate\bin\Debug\net8.0\SharpCEstate.exe
+C:\Users\lucia\SimProgramming\SharpCEstate\bin\Debug\net8.0\SharpCEstate.deps.json
+C:\Users\lucia\SimProgramming\SharpCEstate\bin\Debug\net8.0\SharpCEstate.runtimeconfig.json
+C:\Users\lucia\SimProgramming\SharpCEstate\bin\Debug\net8.0\SharpCEstate.dll
+C:\Users\lucia\SimProgramming\SharpCEstate\bin\Debug\net8.0\SharpCEstate.pdb
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.AssemblyInfoInputs.cache
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.AssemblyInfo.cs
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.csproj.CoreCompileInputs.cache
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.sourcelink.json
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.dll
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\refint\SharpCEstate.dll
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.pdb
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\SharpCEstate.genruntimeconfig.cache
+C:\Users\lucia\SimProgramming\SharpCEstate\obj\Debug\net8.0\ref\SharpCEstate.dll
