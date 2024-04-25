@@ -5,6 +5,7 @@ using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Transforms;
 using Microsoft.ML.Transforms.Text;
+using Microsoft.ML.FastTree;
 
 namespace SharpCEstate
 {
@@ -35,58 +36,58 @@ namespace SharpCEstate
         }
 
         private static ITransformer CreateDefaultModel(MLContext mlContext)
-{
-    // Assume ProcessedRealEstateData includes the proper properties, 
-    // and has fields that will be used as features.
-    var data = new List<ProcessedRealEstateData>
-    {
-        new ProcessedRealEstateData { Nome = "Example", Preco = 0.0f, Area = 0.0f, Localizacao = "None" }
-    };
+        {
+            // Assume ProcessedRealEstateData includes the proper properties, 
+            // and has fields that will be used as features.
+            var data = new List<ProcessedRealEstateData>
+            {
+                new ProcessedRealEstateData { Nome = "Example", Preco = 0.0f, Area = 0.0f, Localizacao = "None" }
+            };
 
-    // Load the data into an IDataView.
-    var dataView = mlContext.Data.LoadFromEnumerable(data);
+            // Load the data into an IDataView.
+            var dataView = mlContext.Data.LoadFromEnumerable(data);
 
-    // Set up the pipeline to create the 'Features' column
-    var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
-        .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))  // Here, concatenate 'Area' with 'Preco' to form 'Features'
-        .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "Preco"))  // Ensure 'Label' column is created from 'Preco'
-        .Append(mlContext.Regression.Trainers.FastTree());
+            // Set up the pipeline to create the 'Features' column
+            var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
+                .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))  // Here, concatenate 'Area' with 'Preco' to form 'Features'
+                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "Preco"))  // Ensure 'Label' column is created from 'Preco'
+                .Append(mlContext.Regression.Trainers.FastTree());
 
-    return pipeline.Fit(dataView);
-}
+            return pipeline.Fit(dataView);
+        }
     }
 
     public static class RealEstateDataProcessor
     {
         public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
-{
-    Console.WriteLine("Carregando e processando dados do arquivo CSV...");
-    var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
+        {
+            Console.WriteLine("Carregando e processando dados do arquivo CSV...");
+            var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
 
-    // Convert 'Preco' from string to float before any other transformation
-    var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
-        outputColumnName: "PrecoFloat", 
-        inputColumnName: "Preco", 
-        outputKind: DataKind.Single)
-        .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
+            // Convert 'Preco' from string to float before any other transformation
+            var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
+                outputColumnName: "PrecoFloat",
+                inputColumnName: "Preco",
+                outputKind: DataKind.Single)
+                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
 
-    return dataProcessPipeline.Fit(dataView).Transform(dataView);
-}
+            return dataProcessPipeline.Fit(dataView).Transform(dataView);
+        }
 
 
 
         public static ITransformer TrainModel(MLContext mlContext, IDataView trainingData)
-{
-    Console.WriteLine("Treinando o modelo...");
+        {
+            Console.WriteLine("Treinando o modelo...");
 
-    // Define the machine learning pipeline
-    var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
-                .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))
-                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
-                .Append(mlContext.Regression.Trainers.FastTree());
+            // Define the machine learning pipeline
+            var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
+                        .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))
+                        .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
+                        .Append(mlContext.Regression.Trainers.FastTree());
 
-    return pipeline.Fit(trainingData);
-}
+            return pipeline.Fit(trainingData);
+        }
 
 
         public static void PrepareData(RealEstateData input, ProcessedRealEstateData output)
@@ -104,20 +105,25 @@ namespace SharpCEstate
 
     public static class MachineLearningModel
     {
+        public static event EventHandler<RealEstatePredictionEventArgs>? PredictionsReady;  // Adicionado
         public static void ExecuteMLNET(MLContext mlContext, ITransformer model, IDataView inputData)
-{
-    Console.WriteLine("Executando modelo ML.NET...");
-    var predictionFunction = mlContext.Model.CreatePredictionEngine<ProcessedRealEstateData, RealEstatePrediction>(model);
+        {
+            Console.WriteLine("Executando modelo ML.NET...");
+            var predictionFunction = mlContext.Model.CreatePredictionEngine<ProcessedRealEstateData, RealEstatePrediction>(model);
 
-    var dataEnumerable = mlContext.Data.CreateEnumerable<ProcessedRealEstateData>(inputData, reuseRowObject: false);
-    foreach (var item in dataEnumerable)
-    {
-        var prediction = predictionFunction.Predict(item);
-        Console.WriteLine($"Predição de preço para {item.Nome}: {prediction.PredictedPrice}");
-    }
-}
+            var dataEnumerable = mlContext.Data.CreateEnumerable<ProcessedRealEstateData>(inputData, reuseRowObject: false);
+            foreach (var item in dataEnumerable)
+            {
+                var prediction = predictionFunction.Predict(item);
+                Console.WriteLine($"Predição de preço para {item.Nome}: {prediction.PredictedPrice}");
+                OnPredictionsReady(new RealEstatePredictionEventArgs { PredictedPrice = prediction.PredictedPrice }); // Disparar evento aqui
+            }
+        }
 
-
+        private static void OnPredictionsReady(RealEstatePredictionEventArgs e)  // Adicionado
+        {
+            PredictionsReady?.Invoke(null, e);
+        }
 
         public static void SaveModel(MLContext mlContext, ITransformer model, DataViewSchema schema)
         {
@@ -125,6 +131,11 @@ namespace SharpCEstate
             var modelPath = "model.zip";
             mlContext.Model.Save(model, schema, modelPath);
         }
+    }
+
+    public class RealEstatePredictionEventArgs : EventArgs // Adicionado
+    {
+        public float PredictedPrice { get; set; }
     }
 
     public class RealEstateData
@@ -153,7 +164,7 @@ namespace SharpCEstate
         public float PredictedPrice;
     }
 
-    class Program
+/*    class Program
     {
         static void Main(string[] args)
         {
@@ -173,5 +184,5 @@ namespace SharpCEstate
             var testData = RealEstateDataProcessor.LoadAndPrepareData(mlContext, "imovirtual_casas.csv");
             MachineLearningModel.ExecuteMLNET(mlContext, model, testData);
         }
-    }
+    }*/
 }

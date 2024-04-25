@@ -1,4 +1,5 @@
 using System;
+using Microsoft.ML;
 
 namespace SharpCEstate
 {
@@ -25,11 +26,12 @@ namespace SharpCEstate
 
     public class SystemInitializer
     {
+        private MLContext mLContext = new MLContext(seed: 0); // Cria um contexto ML com uma semente para reprodutibilidade
         public void InitializeSystem()
         {
             // Carregar configurações e inicializar modelo
             Configurations.Load();
-            ModelInitializer.InitializeModel();
+            var model = ModelInitializer.InitializeModel(mLContext);  // Assumindo que isso retorna algo que precisamos
 
             // Depois de inicializar o sistema, preparar a interface
             ViewUpdater.PrepareInterface();
@@ -38,14 +40,27 @@ namespace SharpCEstate
 
     public class PriceForecastController
     {
+        private MLContext mlContext = new MLContext(seed: 0); // Cria um contexto ML com uma semente para reprodutibilidade
+        private ITransformer? model;
+        public PriceForecastController()
+        {
+            // Inscrever-se no evento de previsão de preços completada
+            MachineLearningModel.PredictionsReady += OnPricePredicted;
+        }
+
         public void InitiatePriceForecast()
         {
-            // Processar dados, executar ML.NET e mostrar previsão
-            RealEstateDataProcessor.ProcessData();
-            MachineLearningModel.ExecuteMLNET();
+            var dataView = RealEstateDataProcessor.LoadAndPrepareData(mlContext, "./imovirtual_casas.csv"); // Isto tem de ser corrigido
+            // Processar dados e executar ML.NET
+            model = RealEstateDataProcessor.TrainModel(mlContext, dataView); // Supõe que existe um método TrainModel que retorna ITransformer
+            MachineLearningModel.ExecuteMLNET(mlContext, model, dataView);
+        }
 
-            // Depois de executar o modelo, mostrar a previsão
-            ViewUpdater.ShowForecast();
+        private void OnPricePredicted(object? sender, RealEstatePredictionEventArgs e)
+        {
+            // Atualizar a previsão na interface de usuário
+            Console.WriteLine($"Previsão recebida: {e.PredictedPrice}");
+            ViewUpdater.ShowForecast(e.PredictedPrice);
         }
 
         public void UpdateForecastResult()
