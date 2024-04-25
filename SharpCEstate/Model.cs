@@ -57,37 +57,40 @@ namespace SharpCEstate
         }
     }
 
-    public static class RealEstateDataProcessor
+   public static class RealEstateDataProcessor
+{
+    public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
     {
-        public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
-        {
-            Console.WriteLine("Carregando e processando dados do arquivo CSV...");
-            var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
+        Console.WriteLine("Carregando e processando dados do arquivo CSV...");
+        var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
 
-            // Convert 'Preco' from string to float before any other transformation
-            var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
-                outputColumnName: "PrecoFloat",
-                inputColumnName: "Preco",
-                outputKind: DataKind.Single)
-                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
+        // Pipeline para converter 'Preco' de string para float
+        var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
+            outputColumnName: "PrecoFloat",
+            inputColumnName: "Preco",
+            outputKind: DataKind.Single)
+            .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
 
-            return dataProcessPipeline.Fit(dataView).Transform(dataView);
-        }
+        var transformedData = dataProcessPipeline.Fit(dataView).Transform(dataView);
+        return transformedData;
+    }
+
+    
+
+    public static ITransformer TrainModel(MLContext mlContext, IDataView trainingData)
+{
+    Console.WriteLine("Treinando o modelo...");
+
+    // Definir o pipeline de machine learning usando a coluna 'PrecoFloat'
+    var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
+                    .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area", "PrecoFloat"))
+                    .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
+                    .Append(mlContext.Regression.Trainers.FastTree());
+
+    return pipeline.Fit(trainingData);
+}
 
 
-
-        public static ITransformer TrainModel(MLContext mlContext, IDataView trainingData)
-        {
-            Console.WriteLine("Treinando o modelo...");
-
-            // Define the machine learning pipeline
-            var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
-                        .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))
-                        .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
-                        .Append(mlContext.Regression.Trainers.FastTree());
-
-            return pipeline.Fit(trainingData);
-        }
 
 
         public static void PrepareData(RealEstateData input, ProcessedRealEstateData output)
@@ -102,6 +105,19 @@ namespace SharpCEstate
             output.Area = float.TryParse(areaClean, out float areaParsed) ? areaParsed : 0;
         }
     }
+
+public static class DataDebuggingTools
+{
+    public static void PrintDataViewSchema(IDataView dataView)
+    {
+        var preview = dataView.Preview();
+        Console.WriteLine("Visualização do esquema de dados:");
+        foreach (var column in preview.Schema)
+        {
+            Console.WriteLine($"{column.Name}: {column.Type.RawType}");
+        }
+    }
+}
 
     public static class MachineLearningModel
     {
