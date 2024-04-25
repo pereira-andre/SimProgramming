@@ -1246,19 +1246,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Secundaria\\.nuget\\packages\\": {}
+    "C:\\Users\\lucia\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Secundaria\\Documents\\UAB - LDS\\SimProgramming\\SimProgramming\\SharpCEstate\\SharpCEstate.csproj",
+      "projectUniqueName": "C:\\Users\\lucia\\SimProgramming\\SharpCEstate\\SharpCEstate.csproj",
       "projectName": "SharpCEstate",
-      "projectPath": "C:\\Users\\Secundaria\\Documents\\UAB - LDS\\SimProgramming\\SimProgramming\\SharpCEstate\\SharpCEstate.csproj",
-      "packagesPath": "C:\\Users\\Secundaria\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Secundaria\\Documents\\UAB - LDS\\SimProgramming\\SimProgramming\\SharpCEstate\\obj\\",
+      "projectPath": "C:\\Users\\lucia\\SimProgramming\\SharpCEstate\\SharpCEstate.csproj",
+      "packagesPath": "C:\\Users\\lucia\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lucia\\SimProgramming\\SharpCEstate\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Secundaria\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\lucia\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1276,6 +1276,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1307,7 +1312,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Secundaria\\AppData\\Roaming\\.dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

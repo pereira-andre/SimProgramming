@@ -41,7 +41,7 @@ namespace SharpCEstate
             // and has fields that will be used as features.
             var data = new List<ProcessedRealEstateData>
             {
-                new ProcessedRealEstateData { Nome = "Example", Preco = 0.0f, Area = 0.0f, Localizacao = "None" }
+                new ProcessedRealEstateData { Nome = "Example", PrecoFloat = 0.0f, AreaFloat = 0.0f, Localizacao = "None" }
             };
 
             // Load the data into an IDataView.
@@ -49,46 +49,54 @@ namespace SharpCEstate
 
             // Set up the pipeline to create the 'Features' column
             var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
-                .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area"))  // Here, concatenate 'Area' with 'Preco' to form 'Features'
-                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "Preco"))  // Ensure 'Label' column is created from 'Preco'
+                .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "AreaFloat"))  // Here, concatenate 'Area' with 'Preco' to form 'Features'
+                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))  // Ensure 'Label' column is created from 'Preco'
                 .Append(mlContext.Regression.Trainers.FastTree());
 
             return pipeline.Fit(dataView);
         }
     }
 
-   public static class RealEstateDataProcessor
-{
-    public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
+    public static class RealEstateDataProcessor
     {
-        Console.WriteLine("Carregando e processando dados do arquivo CSV...");
-        var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
+        public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
+        {
+            filePath = @"C:\Users\lucia\SimProgramming\SharpCEstate\imovirtual_casas.csv";
+            Console.WriteLine("Carregando e processando dados do arquivo CSV...");
+            var dataView = mlContext.Data.LoadFromTextFile<RealEstateData>(filePath, hasHeader: true, separatorChar: ',');
 
-        // Pipeline para converter 'Preco' de string para float
-        var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
-            outputColumnName: "PrecoFloat",
-            inputColumnName: "Preco",
-            outputKind: DataKind.Single)
-            .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
+            // Pipeline para converter 'Preco' de string para float
+            var dataProcessPipeline = mlContext.Transforms.Conversion.ConvertType(
+                outputColumnName: "AreaFloat", // Criar uma nova coluna para armazenar o valor convertido
+                inputColumnName: "Area",
+                outputKind: DataKind.Single)
+                .Append(mlContext.Transforms.Conversion.ConvertType(
+                    outputColumnName: "PrecoFloat",
+                    inputColumnName: "Preco",
+                    outputKind: DataKind.Single))
+                .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"));
 
-        var transformedData = dataProcessPipeline.Fit(dataView).Transform(dataView);
-        return transformedData;
-    }
+            var transformedData = dataProcessPipeline.Fit(dataView).Transform(dataView);
 
-    
+            DataDebuggingTools.PrintDataViewSchema(transformedData);  // Adicionado
 
-    public static ITransformer TrainModel(MLContext mlContext, IDataView trainingData)
-{
-    Console.WriteLine("Treinando o modelo...");
+            return transformedData;
+        }
 
-    // Definir o pipeline de machine learning usando a coluna 'PrecoFloat'
-    var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
-                    .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area", "PrecoFloat"))
-                    .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
-                    .Append(mlContext.Regression.Trainers.FastTree());
 
-    return pipeline.Fit(trainingData);
-}
+
+        public static ITransformer TrainModel(MLContext mlContext, IDataView trainingData)
+        {
+            Console.WriteLine("Treinando o modelo...");
+
+            // Definir o pipeline de machine learning usando a coluna 'PrecoFloat'
+            var pipeline = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "DescriptionFeaturized", inputColumnName: "Nome")
+                            .Append(mlContext.Transforms.Concatenate("Features", "DescriptionFeaturized", "Area", "PrecoFloat"))
+                            .Append(mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "PrecoFloat"))
+                            .Append(mlContext.Regression.Trainers.FastTree());
+
+            return pipeline.Fit(trainingData);
+        }
 
 
 
@@ -99,25 +107,25 @@ namespace SharpCEstate
             output.Localizacao = input.Localizacao ?? string.Empty;
 
             var precoClean = input.Preco.Replace(" €", "").Replace(".", "").Replace(",", "").Trim();
-            output.Preco = float.TryParse(precoClean, out float precoParsed) ? precoParsed : 0;
+            output.PrecoFloat = float.TryParse(precoClean, out float precoParsed) ? precoParsed : 0;
 
             var areaClean = input.Area.Replace(" m²", "").Replace(",", ".").Trim();
-            output.Area = float.TryParse(areaClean, out float areaParsed) ? areaParsed : 0;
+            output.AreaFloat = float.TryParse(areaClean, out float areaParsed) ? areaParsed : 0;
         }
     }
 
-public static class DataDebuggingTools
-{
-    public static void PrintDataViewSchema(IDataView dataView)
+    public static class DataDebuggingTools
     {
-        var preview = dataView.Preview();
-        Console.WriteLine("Visualização do esquema de dados:");
-        foreach (var column in preview.Schema)
+        public static void PrintDataViewSchema(IDataView dataView)
         {
-            Console.WriteLine($"{column.Name}: {column.Type.RawType}");
+            var preview = dataView.Preview();
+            Console.WriteLine("Visualização do esquema de dados:");
+            foreach (var column in preview.Schema)
+            {
+                Console.WriteLine($"{column.Name}: {column.Type.RawType}");
+            }
         }
     }
-}
 
     public static class MachineLearningModel
     {
@@ -143,7 +151,7 @@ public static class DataDebuggingTools
 
         public static void SaveModel(MLContext mlContext, ITransformer model, DataViewSchema schema)
         {
-            Console.WriteLine("Salvando o modelo treinado...");
+            Console.WriteLine("A guardar o modelo treinado...");
             var modelPath = "model.zip";
             mlContext.Model.Save(model, schema, modelPath);
         }
@@ -169,8 +177,8 @@ public static class DataDebuggingTools
     public class ProcessedRealEstateData
     {
         public string Nome { get; set; } = string.Empty;
-        public float Preco { get; set; } = 0.0f;
-        public float Area { get; set; } = 0.0f;
+        public float PrecoFloat { get; set; } = 0.0f;
+        public float AreaFloat { get; set; } = 0.0f;
         public string Localizacao { get; set; } = string.Empty;
     }
 
@@ -180,25 +188,4 @@ public static class DataDebuggingTools
         public float PredictedPrice;
     }
 
-/*    class Program
-    {
-        static void Main(string[] args)
-        {
-            Configurations.Load();
-            MLContext mlContext = new MLContext(seed: 0);
-
-            var model = ModelInitializer.InitializeModel(mlContext);
-            if (model == null)
-            {
-                var dataView = RealEstateDataProcessor.LoadAndPrepareData(mlContext, "imovirtual_casas.csv");
-                var dataSplit = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-                var trainingData = dataSplit.TrainSet;
-                model = RealEstateDataProcessor.TrainModel(mlContext, trainingData);
-                MachineLearningModel.SaveModel(mlContext, model, trainingData.Schema);
-            }
-
-            var testData = RealEstateDataProcessor.LoadAndPrepareData(mlContext, "imovirtual_casas.csv");
-            MachineLearningModel.ExecuteMLNET(mlContext, model, testData);
-        }
-    }*/
 }
