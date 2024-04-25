@@ -5,11 +5,13 @@ namespace SharpCEstate
         public static void PrepareInterface()
         {
             // Logica para preparar a interface
+            Console.WriteLine("Interface preparada para receber dados.");
         }
 
-        public static void ShowForecast()
+        public static void ShowForecast(float predictedPrice)
         {
-            // Logica para mostrar a previsao
+            // Lógica para mostrar a previsão
+            Console.WriteLine($"Previsão de preço exibida: {predictedPrice}.");
         }
     }
 
@@ -18,6 +20,7 @@ namespace SharpCEstate
         public static void Interact()
         {
             // Logica para interagir com o usuario
+            Console.WriteLine("Interagindo com o usuário para atualizações ou novas consultas.");
         }
     }
 }
