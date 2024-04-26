@@ -1,0 +1,30 @@
+# Number of terms = 29
+0	Aveiro
+1	Porto
+2	Setúbal
+3	Faro
+4	Lisboa
+5	Coimbra
+6	230.76
+7	Braga
+8	Leiria
+9	Santarém
+10	Apartamento para comprar: Castelo Branco
+11	Viana do Castelo
+12	Castelo Branco
+13	Ilha da Madeira
+14	Beja
+15	Évora
+16	Ilha de São Miguel
+17	Apartamento para comprar: Viseu
+18	Viseu
+19	Portalegre
+20	Vila Real
+21	Bragança
+22	Guarda
+23	Ilha das Flores
+24	Apartamento para comprar: Guarda
+25	210.61
+26	209.93
+27	Ilha Terceira
+28	15

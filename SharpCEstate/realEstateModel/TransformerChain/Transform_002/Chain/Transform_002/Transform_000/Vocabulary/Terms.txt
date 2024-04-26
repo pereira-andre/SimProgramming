@@ -1,0 +1,10 @@
+# Number of terms = 9
+0	t2
+1	t4
+2	t1
+3	t3
+4	t0
+5	t5
+6	t6
+7	t7
+8	t8
