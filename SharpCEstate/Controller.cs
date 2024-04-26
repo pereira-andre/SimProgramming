@@ -1,3 +1,4 @@
+// Controller.cs
 using System;
 using Microsoft.ML;
 
@@ -5,67 +6,52 @@ namespace SharpCEstate
 {
     public class ApplicationController
     {
-        private SystemInitializer systemInitializer = new SystemInitializer();
-        private PriceForecastController priceForecastController = new PriceForecastController();
+        private MLContext mlContext = new MLContext(seed: 0);
+        private ITransformer? model;
+        private string modelPath = "./realEstateModel.zip";
+        private string dataPath = "./dados_limpos.csv";
+
+        public ApplicationController()
+        {
+            // Registar o evento de predição concluída
+            RealEstateDataProcessor.OnPredictionCompleted += UpdateViewAfterPrediction;
+        }
+
+        // Método para atualizar a view após a predição
+        private void UpdateViewAfterPrediction(RealEstatePrediction prediction)
+        {
+            ViewUpdater.ShowForecast(prediction.PredictedPrice);
+        }
 
         public void StartApplication()
         {
-            systemInitializer.InitializeSystem();
-        }
+            // Carregar e preparar os dados
+            var dataView = RealEstateDataProcessor.LoadAndPrepareData(mlContext, dataPath);
+            var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+            var trainingData = splitData.TrainSet;
 
-        public void RequestPriceForecast()
-        {
-            priceForecastController.InitiatePriceForecast();
-        }
+            // Treinar o modelo
+            model = RealEstateDataProcessor.TrainModel(mlContext, trainingData);
 
-        public void UpdateForecastResult()
-        {
-            priceForecastController.UpdateForecastResult();
-        }
-    }
+            // Salvar o modelo
+            RealEstateDataProcessor.SaveModel(mlContext, model, modelPath);
 
-    public class SystemInitializer
-    {
-        private MLContext mLContext = new MLContext(seed: 0); // Cria um contexto ML com uma semente para reprodutibilidade
-        public void InitializeSystem()
-        {
-            // Carregar configurações e inicializar modelo
-            Configurations.Load();
-            var model = ModelInitializer.InitializeModel(mLContext);  // Assumindo que isso retorna algo que precisamos
-
-            // Depois de inicializar o sistema, preparar a interface
+            // Atualizar a view após inicialização completa
             ViewUpdater.PrepareInterface();
         }
-    }
 
-    public class PriceForecastController
-    {
-        private MLContext mlContext = new MLContext(seed: 0); // Cria um contexto ML com uma semente para reprodutibilidade
-        private ITransformer? model;
-        public PriceForecastController()
+        public void RequestPriceForecast(float area, string location, string nome)
         {
-            // Inscrever-se no evento de previsão de preços completada
-            MachineLearningModel.PredictionsReady += OnPricePredicted;
-        }
+            // Criar dados de entrada para a predição
+            var inputData = new RealEstateData { Area = area, Localizacao = location, Nome = nome };
 
-        public void InitiatePriceForecast()
-        {
-            var dataView = RealEstateDataProcessor.LoadAndPrepareData(mlContext, "./imovirtual_casas.csv"); // Isto tem de ser corrigido
-            // Processar dados e executar ML.NET
-            model = RealEstateDataProcessor.TrainModel(mlContext, dataView); // Supõe que existe um método TrainModel que retorna ITransformer
-            MachineLearningModel.ExecuteMLNET(mlContext, model, dataView);
-        }
-
-        private void OnPricePredicted(object? sender, RealEstatePredictionEventArgs e)
-        {
-            // Atualizar a previsão na interface de usuário
-            Console.WriteLine($"Previsão recebida: {e.PredictedPrice}");
-            ViewUpdater.ShowForecast(e.PredictedPrice);
+            // Fazer a predição
+            RealEstateDataProcessor.PredictPrice(mlContext, modelPath, inputData);
         }
 
         public void UpdateForecastResult()
         {
-            // Interagir com o usuário para atualizar a previsão
+            // Chamar interação do usuário para atualizações
             UserInteractionView.Interact();
         }
     }

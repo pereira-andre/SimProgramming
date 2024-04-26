@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "70W6OYEF6ENt1XvvHz/q1jX/MyWvNbuGKX7c9cF7VZzVDCMW4VpOGTSbLZshW3tmIm9EA22oKKl4C6KaMLOU6w==",
+  "dgSpecHash": "FiyCJqOb0WJCvZZyZnfxHQDqZxxDCqk8p0spbJ7EGvlyL3BB+mgfhX/eAW/fYp1j/bHN8IFx+q+dvfRihmhUSQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lucia\\SimProgramming\\SharpCEstate\\SharpCEstate.csproj",
+  "projectFilePath": "C:\\Users\\lucia\\Downloads\\SimProgramming-main\\SimProgramming-main\\SharpCEstate\\SharpCEstate.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lucia\\.nuget\\packages\\microsoft.ml\\3.0.1\\microsoft.ml.3.0.1.nupkg.sha512",
     "C:\\Users\\lucia\\.nuget\\packages\\microsoft.ml.cpumath\\3.0.1\\microsoft.ml.cpumath.3.0.1.nupkg.sha512",
