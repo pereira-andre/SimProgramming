@@ -1,11 +1,13 @@
 // Controller.cs
 using System;
 using Microsoft.ML;
+using Microsoft.VisualBasic;
 
 namespace SharpCEstate
 {
     public class ApplicationController
     {
+        private static ApplicationController? instance;
         private MLContext mlContext = new MLContext(seed: 0);
         private ITransformer? model;
         private string modelPath = "./realEstateModel.zip";
@@ -13,8 +15,20 @@ namespace SharpCEstate
 
         public ApplicationController()
         {
-            // Registar o evento de predição concluída
             RealEstateDataProcessor.OnPredictionCompleted += UpdateViewAfterPrediction;
+        }
+
+        // Propriedade Singleton
+        public static ApplicationController Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ApplicationController();
+                }
+                return instance;
+            }
         }
 
         // Método para atualizar a view após a predição
