@@ -3,6 +3,7 @@ using System;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Transforms.Text;
+using System.Threading.Tasks;
 
 namespace SharpCEstate
 {
@@ -25,8 +26,10 @@ namespace SharpCEstate
     public static class RealEstateDataProcessor
     {
         // Carrega e prepara os dados de um arquivo CSV
-        public static IDataView LoadAndPrepareData(MLContext mlContext, string filePath)
+        public static async Task<IDataView> LoadAndPrepareDataAsync(MLContext mlContext, string filePath)
         {
+            // Imitando operação assíncrona (A biblioteca ML.NET padrão não suporta carregamento assíncrono nativo)
+            await Task.Delay(100); // Simulando delay de IO
             return mlContext.Data.LoadFromTextFile<RealEstateData>(
                 filePath, hasHeader: true, separatorChar: ',');
         }
@@ -68,6 +71,12 @@ namespace SharpCEstate
             OnPredictionCompleted?.Invoke(prediction);
 
             return prediction;
+        }
+        // Validação de dados de entrada para garantir que todos os campos necessários estão presentes
+        public static void ValidateData(RealEstateData data)
+        {
+            if (data.Area <= 0 || string.IsNullOrEmpty(data.Localizacao) || string.IsNullOrEmpty(data.Nome))
+                throw new ArgumentException("Todos os campos de entrada devem estar preenchidos e a área deve ser maior que zero.");
         }
     }
 }

@@ -1,19 +1,20 @@
 // SharpCEstate.cs
 using System;
+using System.Threading.Tasks;
 using Microsoft.ML;
 
 namespace SharpCEstate
 {
     class SharpCEstate
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Cria uma instância do contexto ML
             MLContext mlContext = new MLContext(seed: 0);
 
             // Cria e inicia o controlador da aplicação
             ApplicationController controller = new ApplicationController();
-            controller.StartApplication();
+            await controller.StartApplicationAsync();
 
             // Exibe mensagem inicial e espera interação do usuário
             Console.WriteLine("Bem-vindo ao SharpCEstate! Sua ferramenta de previsão de preços imobiliários.");
