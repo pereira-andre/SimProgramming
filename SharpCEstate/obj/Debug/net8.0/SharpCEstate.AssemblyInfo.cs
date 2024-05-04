@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SharpCEstate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6b066753c4e021687c79fed6b61813925b60691")]
 [assembly: System.Reflection.AssemblyProductAttribute("SharpCEstate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SharpCEstate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

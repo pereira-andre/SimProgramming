@@ -5,14 +5,25 @@ namespace SharpCEstate
 {
     public static class ViewUpdater
     {
+        private static bool isForecastShown = false;
         public static void PrepareInterface()
         {
             Console.WriteLine("Interface preparada. A aplicação está pronta para receber comandos.");
+            isForecastShown = false; // Resetar o estado cada vez que a interface é preparada
         }
 
         public static void ShowForecast(float predictedPrice)
         {
-            Console.WriteLine($"Previsão de preço exibida: {predictedPrice} €.");
+            if (!isForecastShown)
+            {
+                Console.WriteLine($"Previsão de preço exibida: {predictedPrice} €.");
+                isForecastShown = true; // Marcar como mostrado para evitar duplicação
+            }
+        }
+
+        public static void ResetForecastDisplay()
+        {
+            isForecastShown = false; // Resetar a exibição da previsão para novas interações
         }
     }
 
@@ -20,6 +31,8 @@ namespace SharpCEstate
     {
         public static void Interact()
         {
+            ViewUpdater.ResetForecastDisplay(); // Assegurar que a previsão possa ser mostrada novamente
+            
             Console.WriteLine("Interagindo com o usuário. Digite 'sair' para encerrar ou 'nova' para uma nova previsão.");
             string userInput = Console.ReadLine()?.Trim() ?? string.Empty;
             if (userInput.ToLower() == "nova")
@@ -32,7 +45,8 @@ namespace SharpCEstate
                     string localizacao = inputs[1].Trim();
                     string nome = inputs[2].Trim();
 
-                    var controller = new ApplicationController();
+                    // Usar a instância Singleton para prever preço
+                    ApplicationController controller = ApplicationController.Instance;
                     controller.RequestPriceForecast(area, localizacao, nome);
                 }
                 else
