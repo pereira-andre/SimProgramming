@@ -1,7 +1,7 @@
 // Controller.cs
 using System;
 using Microsoft.ML;
-using Microsoft.VisualBasic;
+using System.Threading.Tasks;
 
 namespace SharpCEstate
 {
@@ -37,30 +37,45 @@ namespace SharpCEstate
             ViewUpdater.ShowForecast(prediction.PredictedPrice);
         }
 
-        public void StartApplication()
+        public async Task StartApplicationAsync()
         {
-            // Carregar e preparar os dados
-            var dataView = RealEstateDataProcessor.LoadAndPrepareData(mlContext, dataPath);
-            var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
-            var trainingData = splitData.TrainSet;
+            try
+            {
+                // Carregar e preparar os dados
+                var dataView = await RealEstateDataProcessor.LoadAndPrepareDataAsync(mlContext, dataPath);
+                var splitData = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+                var trainingData = splitData.TrainSet;
 
-            // Treinar o modelo
-            model = RealEstateDataProcessor.TrainModel(mlContext, trainingData);
+                // Treinar o modelo
+                model = RealEstateDataProcessor.TrainModel(mlContext, trainingData);
 
-            // Salvar o modelo
-            RealEstateDataProcessor.SaveModel(mlContext, model, modelPath);
+                // Salvar o modelo
+                RealEstateDataProcessor.SaveModel(mlContext, model, modelPath);
 
-            // Atualizar a view após inicialização completa
-            ViewUpdater.PrepareInterface();
+                // Atualizar a view após inicialização completa
+                ViewUpdater.PrepareInterface();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro durante a inicialização da aplicação: {ex.Message}");
+            }
+            
         }
 
         public void RequestPriceForecast(float area, string location, string nome)
         {
-            // Criar dados de entrada para a predição
-            var inputData = new RealEstateData { Area = area, Localizacao = location, Nome = nome };
+            try
+            {
+                // Criar dados de entrada para a predição
+                var inputData = new RealEstateData { Area = area, Localizacao = location, Nome = nome };
 
-            // Fazer a predição
-            RealEstateDataProcessor.PredictPrice(mlContext, modelPath, inputData);
+                // Fazer a predição
+                RealEstateDataProcessor.PredictPrice(mlContext, modelPath, inputData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro durante a previsão de preço: {ex.Message}");
+            }
         }
 
         public void UpdateForecastResult()

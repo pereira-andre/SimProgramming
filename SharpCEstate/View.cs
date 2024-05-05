@@ -32,7 +32,7 @@ namespace SharpCEstate
         public static void Interact()
         {
             ViewUpdater.ResetForecastDisplay(); // Assegurar que a previsão possa ser mostrada novamente
-            
+
             Console.WriteLine("Interagindo com o usuário. Digite 'sair' para encerrar ou 'nova' para uma nova previsão.");
             string userInput = Console.ReadLine()?.Trim() ?? string.Empty;
             if (userInput.ToLower() == "nova")
@@ -41,13 +41,24 @@ namespace SharpCEstate
                 string[] inputs = Console.ReadLine()?.Split(',') ?? new string[0];
                 if (inputs.Length >= 3)
                 {
-                    float area = float.Parse(inputs[0].Trim());
-                    string localizacao = inputs[1].Trim();
-                    string nome = inputs[2].Trim();
+                    try
+                    {
+                        float area = float.Parse(inputs[0].Trim());
+                        string localizacao = inputs[1].Trim();
+                        string nome = inputs[2].Trim();
 
-                    // Usar a instância Singleton para prever preço
-                    ApplicationController controller = ApplicationController.Instance;
-                    controller.RequestPriceForecast(area, localizacao, nome);
+                        // Usar a instância Singleton para prever preço
+                        ApplicationController controller = ApplicationController.Instance;
+                        controller.RequestPriceForecast(area, localizacao, nome);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Formato inválido. Certifique-se de que a área é um número e os detalhes estão corretos.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao processar a previsão: {ex.Message}");
+                    }
                 }
                 else
                 {
