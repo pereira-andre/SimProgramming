@@ -1,9 +1,16 @@
-<div align="right">
-  <img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa" width="100" height="100">
-</div>
+<table border="0">
+ <tr>
+    <td><img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa" width="100" height="100"></td>
+    <td>
+      <h1>SimProgramming - Equipa 013 SharpCEstate</h1>
+      UC Laboratório de Desenvolvimento de Software - UAb
+    </td>
+ </tr>
+</table>
 
-# SimProgramming - Equipa 013 SharpCEstate
-UC Laboratório de Desenvolvimento de Software - UAb
+## Descrição do Projeto
+SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Código: 21179, Turma 3
+
 
 ## Descrição do Projeto
 SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Código: 21179, Turma 3) da Universidade Aberta. Este projeto visa criar uma aplicação robusta de previsão de preços imobiliários, utilizando técnicas de machine learning para analisar e prever a evolução dos preços do setor imobiliário, assegurando os princípios da MVC.
