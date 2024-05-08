@@ -1,6 +1,9 @@
 # SimProgramming - Equipa 013 SharpCEstate
 UC Laboratório de Desenvolvimento de Software - UAb
 
+<div align="right">
+  <img src="caminho/para/o/logo.png" alt="Logo da Empresa">
+</div>
 
 ## Descrição do Projeto
 SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Código: 21179, Turma 3) da Universidade Aberta. Este projeto visa criar uma aplicação robusta de previsão de preços imobiliários, utilizando técnicas de machine learning para analisar e prever a evolução dos preços do setor imobiliário, assegurando os princípios da MVC.
