@@ -2,7 +2,7 @@
 UC Laboratório de Desenvolvimento de Software - UAb
 
 <div align="right">
-  <img src="/main/SharpCEstate/logo.png" alt="Logo da Empresa">
+  <img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa">
 </div>
 
 ## Descrição do Projeto
