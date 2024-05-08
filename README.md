@@ -1,9 +1,8 @@
 # SimProgramming - Equipa 013 SharpCEstate
 UC Laboratório de Desenvolvimento de Software - UAb
 
-<!-- Inclua o logo da empresa no topo direito com o tamanho de 200x200 pixels -->
 <div align="right">
-  <img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa">
+  <img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa" width="50" height="50">
 </div>
 
 ## Descrição do Projeto
