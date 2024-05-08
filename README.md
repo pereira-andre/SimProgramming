@@ -2,7 +2,7 @@
 UC Laboratório de Desenvolvimento de Software - UAb
 
 <div align="right">
-  <img src="caminho/para/o/logo.png" alt="Logo da Empresa">
+  <img src="/main/SharpCEstate/logo.png" alt="Logo da Empresa">
 </div>
 
 ## Descrição do Projeto
