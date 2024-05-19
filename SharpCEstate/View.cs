@@ -48,6 +48,7 @@ namespace SharpCEstate
                     case "1":
                         Console.WriteLine("Por favor, insira os detalhes do imóvel (Área, Localização, Tipo):");
                         var inputs = Console.ReadLine()?.Split(',') ?? new string[0];
+                        // Chama o método HandleUserRequestAsync do controlador para lidar com a solicitação do usuário
                         Task.Run(() => ApplicationController.Instance.HandleUserRequestAsync(inputs)).Wait();
                         break;
                     case "2":
@@ -57,6 +58,7 @@ namespace SharpCEstate
                         {
                             float area = float.Parse(reportInputs[0].Trim());
                             string type = reportInputs[1].Trim();
+                            // Chama o método GeneratePriceReportAsync do controlador para gerar o relatório
                             Task.Run(() => ApplicationController.Instance.GeneratePriceReportAsync(area, type)).Wait();
                         }
                         else
@@ -79,13 +81,13 @@ namespace SharpCEstate
     // Classe responsável por atualizar a visualização
     public static class ViewUpdater
     {
-        private static bool isForecastShown = false;
+        private static bool isForecastShown = false; // Indica se a previsão já foi exibida
 
         // Método para preparar a interface
         public static void PrepareInterface()
         {
             Console.WriteLine("Interface preparada. A aplicação está pronta para receber comandos.");
-            isForecastShown = false;
+            isForecastShown = false; // Reseta a indicação de previsão exibida
         }
 
         // Método para exibir a previsão de preço
@@ -94,14 +96,14 @@ namespace SharpCEstate
             if (!isForecastShown)
             {
                 Console.WriteLine($"Previsão de preço exibida: {predictedPrice} €.");
-                isForecastShown = true;
+                isForecastShown = true; // Marca que a previsão foi exibida
             }
         }
 
         // Método para redefinir a exibição da previsão
         public static void ResetForecastDisplay()
         {
-            isForecastShown = false;
+            isForecastShown = false; // Reseta a indicação de previsão exibida
         }
     }
 }
