@@ -10,6 +10,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="PlantUml.Net" Version="1.3.71" />
+    <PackageReference Include="xunit" Version="2.8.0" />
   </ItemGroup>
 
 </Project>
