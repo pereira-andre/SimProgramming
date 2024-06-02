@@ -33,17 +33,17 @@ namespace SharpCEstate
             UserInteractionView.ShowMenu();
         }
     }
-}
 
-// Define os códigos de erro que podem ocorrer na aplicação
-public enum ErrorCode
-{
-    DataLoadingError,      // Erro ao carregar dados
-    LoadModelError,        // Erro ao carregar o modelo
-    ModelTrainingError,    // Erro ao treinar o modelo
-    ModelSavingError,      // Erro ao salvar o modelo
-    PredictionError,       // Erro ao fazer previsão
-    ViewUpdateError,       // Erro ao atualizar a interface
-    InvalidUserInputError, // Erro de entrada de utilizador inválida
-    UnknownError           // Erro desconhecido
+    // Define os códigos de erro que podem ocorrer na aplicação
+    public enum ErrorCode
+    {
+        DataLoadingError,      // Erro ao carregar dados
+        LoadModelError,        // Erro ao carregar o modelo
+        ModelTrainingError,    // Erro ao treinar o modelo
+        ModelSavingError,      // Erro ao salvar o modelo
+        PredictionError,       // Erro ao fazer previsão
+        ViewUpdateError,       // Erro ao atualizar a interface
+        InvalidUserInputError, // Erro de entrada de utilizador inválida
+        UnknownError           // Erro desconhecido
+    }
 }
