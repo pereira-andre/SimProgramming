@@ -1,3 +1,5 @@
+### README.md
+
 <table border="0">
  <tr>
     <td><img src="https://github.com/pereira-andre/SimProgramming/blob/main/SharpCEstate/logo.png" alt="Logo da Empresa" width="100" height="100"></td>
@@ -9,10 +11,6 @@
 </table>
 
 ## Descrição do Projeto
-SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Código: 21179, Turma 3
-
-
-## Descrição do Projeto
 SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Código: 21179, Turma 3) da Universidade Aberta. Este projeto visa criar uma aplicação robusta de previsão de preços imobiliários, utilizando técnicas de machine learning para analisar e prever a evolução dos preços do setor imobiliário, assegurando os princípios da MVC.
 
 ## Tecnologias Utilizadas
@@ -20,20 +18,24 @@ SharpCEstate é um projeto desenvolvido no âmbito da unidade curricular Laborat
 - **.NET 5/6**: Plataforma de desenvolvimento para a construção da aplicação.
 
 ## Arquitetura
-O projeto segue o padrão MVC (Model-View-Controller), com uma adaptação ao estilo Krasner & Pope, que enfatiza um forte acoplamento entre o Model e a View através do Controller. Isto garante que o processamento de dados e a lógica do utilizador estão claramente definidos e são bem geridos pela aplicação.
+O projeto segue o padrão MVC (Model-View-Controller), com uma adaptação ao estilo Krasner & Pope, que enfatiza um fraco acoplamento entre o Model e a View através do Controller. Isto garante que o processamento de dados e a lógica do utilizador estão claramente definidos e são bem geridos pela aplicação.
 
 ## Instalação
 Para instalar e executar o SharpCEstate localmente, siga os passos abaixo:
 1. Clone o repositório:
    ```
-   git clone https://github.com/[seu-usuario]/SharpCEstate.git
+   git clone https://github.com/pereira-andre/SimProgramming/SharpCEstate.git
    ```
 2. Navegue até a pasta do projeto e instale as dependências:
    ```
    cd SharpCEstate
    dotnet restore
    ```
-3. Execute o projeto:
+3. Compile o projeto:
+   ```
+   dotnet build
+   ```
+4. Execute o projeto:
    ```
    dotnet run
    ```
@@ -44,7 +46,6 @@ Este projeto é distribuído sob a Licença MIT. Veja o arquivo `LICENSE` para m
 ## Contato
 - Líder: André Pereira
 - Desenvolvedores: Mário Prazeres, Rúben Nunes, Luciano Araújo
-- Verificadora: Carla Campa
+- Verificadora: Carla Campanico
 - Email: 2202880@estudante.uab.pt
 - Projeto Link: https://github.com/pereira-andre/SimProgramming
-
